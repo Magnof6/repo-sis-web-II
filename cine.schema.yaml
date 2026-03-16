@@ -1,0 +1,533 @@
+openapi: 3.1.0
+info:
+  title: Cine API
+  version: 1.0.0
+  description: API REST para gestionar películas, sesiones y salas de un cine
+
+servers:
+  - url: http://localhost:3000/api
+    description: Servidor local
+
+paths:
+
+  /peliculas:
+    get:
+      summary: Obtener listado de películas
+      parameters:
+        - name: title
+          in: query
+          schema:
+            type: string
+          description: Filtrar por título
+        - name: genre
+          in: query
+          schema:
+            type: string
+          description: Filtrar por género
+        - name: year
+          in: query
+          schema:
+            type: integer
+          description: Filtrar por año de estreno
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+          description: Página para paginación
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+          description: Número de resultados por página
+      responses:
+        "200":
+          description: Lista de películas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pelicula'
+        "422":
+          description: Parámetros de query inválidos
+    post:
+      summary: Crear una película
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PeliculaInput'
+      responses:
+        "201":
+          description: Película creada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                  id:
+                    type: integer
+        "422":
+          description: JSON inválido
+
+  /peliculas/{id}:
+    get:
+      summary: Obtener detalles de una película
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Detalles de la película
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pelicula'
+        "404":
+          description: Película no encontrada
+    put:
+      summary: Modificar una película
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PeliculaInput'
+      responses:
+        "200":
+          description: Actualización correcta
+        "404":
+          description: Película no encontrada
+        "422":
+          description: JSON inválido
+    delete:
+      summary: Eliminar una película
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Película eliminada correctamente
+        "404":
+          description: Película no encontrada
+
+  /peliculas/{id}/sesiones:
+    get:
+      summary: Obtener sesiones de una película
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Lista de sesiones
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Sesion'
+        "404":
+          description: Película no encontrada
+
+  /sesiones:
+    get:
+      summary: Obtener listado de sesiones
+      parameters:
+        - name: title
+          in: query
+          schema:
+            type: string
+          description: Filtrar por título de película
+        - name: date
+          in: query
+          schema:
+            type: string
+            format: date
+          description: Filtrar por fecha
+        - name: genre
+          in: query
+          schema:
+            type: string
+        - name: theater
+          in: query
+          schema:
+            type: string
+        - name: format
+          in: query
+          schema:
+            type: string
+        - name: version
+          in: query
+          schema:
+            type: string
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+      responses:
+        "200":
+          description: Listado de sesiones
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SesionResumen'
+        "422":
+          description: Parámetros de query erróneos
+    post:
+      summary: Crear una sesión
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SesionInput'
+      responses:
+        "201":
+          description: Sesión creada correctamente
+        "422":
+          description: JSON inválido
+    delete:
+      summary: Eliminar todas las sesiones
+      responses:
+        "200":
+          description: Todas las sesiones eliminadas
+
+  /sesiones/{id}:
+    get:
+      summary: Obtener información de una sesión
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Detalle de la sesión
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sesion'
+        "404":
+          description: Sesión no encontrada
+    put:
+      summary: Modificar una sesión
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SesionInput'
+      responses:
+        "200":
+          description: Sesión modificada
+        "404":
+          description: Sesión no encontrada
+        "422":
+          description: JSON inválido
+    delete:
+      summary: Eliminar una sesión
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Sesión eliminada
+        "404":
+          description: Sesión no encontrada
+
+  /salas:
+    get:
+      summary: Obtener listado de salas
+      responses:
+        "200":
+          description: Lista de salas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Sala'
+    post:
+      summary: Crear una sala
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SalaInput'
+      responses:
+        "201":
+          description: Sala creada
+        "422":
+          description: JSON inválido
+
+  /salas/{id}:
+    get:
+      summary: Obtener información de una sala
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Detalle de la sala
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sala'
+        "404":
+          description: Sala no encontrada
+    put:
+      summary: Modificar una sala
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SalaInput'
+      responses:
+        "200":
+          description: Sala modificada
+        "404":
+          description: Sala no encontrada
+        "422":
+          description: JSON inválido
+    delete:
+      summary: Eliminar sala
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Sala eliminada
+        "404":
+          description: Sala no encontrada
+    get:
+      summary: Obtener sesiones de una sala
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Sesiones de la sala
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Sesion'
+        "404":
+          description: Sala no encontrada
+
+  /cartelera:
+    get:
+      summary: Obtener películas en cartelera
+      responses:
+        "200":
+          description: Listado de películas en cartelera
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PeliculaResumen'
+
+components:
+  schemas:
+    Pelicula:
+      type: object
+      required:
+        - id
+        - title
+        - genre
+        - director
+        - duration
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        genre:
+          type: string
+        director:
+          type: string
+        duration:
+          type: integer
+        releaseYear:
+          type: integer
+        rating:
+          type: number
+    PeliculaInput:
+      type: object
+      required:
+        - title
+        - genre
+      properties:
+        title:
+          type: string
+        genre:
+          type: string
+        director:
+          type: string
+        duration:
+          type: integer
+        releaseYear:
+          type: integer
+        rating:
+          type: number
+    PeliculaResumen:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        genre:
+          type: string
+    Sesion:
+      type: object
+      required:
+        - id
+        - movieId
+        - theaterId
+        - date
+        - time
+      properties:
+        id:
+          type: integer
+        movieId:
+          type: integer
+        theaterId:
+          type: integer
+        date:
+          type: string
+          format: date
+        time:
+          type: string
+          format: time
+        price:
+          type: number
+        version:
+          type: string
+        format:
+          type: string
+    SesionResumen:
+      type: object
+      properties:
+        id:
+          type: integer
+        movieTitle:
+          type: string
+        date:
+          type: string
+        time:
+          type: string
+        theater:
+          type: string
+    SesionInput:
+      type: object
+      required:
+        - movieId
+        - theaterId
+        - date
+        - time
+      properties:
+        movieId:
+          type: integer
+        theaterId:
+          type: integer
+        date:
+          type: string
+          format: date
+        time:
+          type: string
+          format: time
+        price:
+          type: number
+        version:
+          type: string
+        format:
+          type: string
+    Sala:
+      type: object
+      required:
+        - id
+        - name
+        - capacity
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        capacity:
+          type: integer
+        formats:
+          type: array
+          items:
+            type: string
+    SalaInput:
+      type: object
+      required:
+        - name
+        - capacity
+      properties:
+        name:
+          type: string
+        capacity:
+          type: integer
+        formats:
+          type: array
+          items:
+            type: string

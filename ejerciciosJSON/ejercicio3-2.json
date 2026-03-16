@@ -1,0 +1,21 @@
+{
+    "title": "The Matrix",
+    "director": "The Wachowskis",
+    "year": 1999,
+    "genres": "Sci-Fi",
+    "durationMinutes": 136,
+    "rating": {
+        "score": 8.7,
+        "votes": 1900000
+    },
+    "cast": [
+        {
+            "name": "Keanu Reeves",
+            "role": "Neo"
+        },
+        {
+            "name": "Laurence Fishburne",
+            "role": "Morpheus"
+        }
+    ]
+}

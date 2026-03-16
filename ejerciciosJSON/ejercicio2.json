@@ -1,0 +1,65 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema#",
+    "$id": "http://example.com/schemas/squad.schema.json",
+    "type": "object",
+    "title": "Super Hero Squad",
+    "required": [
+        "squadName",
+        "homeTown",
+        "formed",
+        "secretBase",
+        "active",
+        "members"
+    ],
+    "properties": {
+        "squadName": {
+            "type": "string"
+        },
+        "homeTown": {
+            "type": "string"
+        },
+        "formed": {
+            "type": "integer"
+        },
+        "secretBase": {
+            "type": "string"
+        },
+        "active": {
+            "type": "boolean"
+        },
+        "members": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+                "type": "object",
+                "required": [
+                    "name",
+                    "age",
+                    "secretIdentity",
+                    "powers"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "age": {
+                        "type": "integer",
+                        "minimum": 0
+                    },
+                    "secretIdentity": {
+                        "type": "string"
+                    },
+                    "powers": {
+                        "type": "array",
+                        "minItems": 1,
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "additionalProperties": false
+            }
+        }
+    },
+    "additionalProperties": false
+}

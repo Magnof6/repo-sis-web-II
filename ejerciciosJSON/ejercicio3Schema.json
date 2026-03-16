@@ -1,0 +1,102 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema#",
+    "$id": "http://example.com/schemas/movie-flex.schema.json",
+    "title": "Movie Flexible Schema",
+    "type": "object",
+    "required": [
+        "title",
+        "director",
+        "year",
+        "genres",
+        "durationMinutes",
+        "rating"
+    ],
+    "properties": {
+        "title": {
+            "type": "string",
+            "minLength": 1
+        },
+        "director": {
+            "type": "string",
+            "minLength": 3
+        },
+        "year": {
+            "type": "integer",
+            "minimum": 1888,
+            "maximum": 2100
+        },
+        "genres": {
+            "oneOf": [
+                {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "minItems": 1
+                },
+                {
+                    "type": "string"
+                }
+            ]
+        },
+        "durationMinutes": {
+            "type": "integer",
+            "minimum": 1
+        },
+        "rating": {
+            "oneOf": [
+                {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 10
+                },
+                {
+                    "type": "object",
+                    "required": [
+                        "score",
+                        "votes"
+                    ],
+                    "properties": {
+                        "score": {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 10
+                        },
+                        "votes": {
+                            "type": "integer",
+                            "minimum": 0
+                        }
+                    }
+                }
+            ]
+        },
+        "cast": {
+            "oneOf": [
+                {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "required": [
+                            "name"
+                        ],
+                        "properties": {
+                            "name": {
+                                "type": "string"
+                            },
+                            "role": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    },
+    "additionalProperties": false
+}

@@ -1,0 +1,12 @@
+{
+    "name": "Spring Lake",
+    "artist": "Carlos Romero",
+    "description": "A calm watercolor painting of a lake in spring.",
+    "dimension": {
+        "width": 40,
+        "height": 30
+    },
+    "tags": [
+        "watercolor"
+    ]
+}

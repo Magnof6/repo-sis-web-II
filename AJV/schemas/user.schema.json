@@ -1,0 +1,11 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema#",
+    "type": "object",
+    "required": ["name","email","age"],
+    "properties": {
+        "name": {"type": "string"},
+        "email": {"type": "string","format": "email"},
+        "age": {"type": "integer","minimum": 0}
+    },
+    "additionalProperties": false
+}
